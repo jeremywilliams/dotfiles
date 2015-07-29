@@ -41,3 +41,10 @@ fi
 if [ -f ~/.bash_profile ]; then
     . ~/.bash_profile
 fi
+
+export PATH=/home/williamsj/bin/Sencha/Cmd/6.0.0.202:$PATH
+export KLE=/home/williamsj/gocode/src/github.com/Novetta/KLE
+export PERSEUS=/home/williamsj/gocode/src/github.com/Novetta/perseus
+export VIDEX=/home/williamsj/gocode/src/github.com/Novetta/VideoEnterprise
+export COMMON=/home/williamsj/gocode/src/github.com/Novetta/common
+export PWCOP=/home/williamsj/gocode/src/github.com/Novetta/pwcop

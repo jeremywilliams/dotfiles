@@ -503,8 +503,8 @@ cabbrev right botright
 cabbrev sta vertical sta
 
 " Firefox refresh
-" let g:firefox_refresh_files = "*.js"
-let $firefox_refresh_host = "webclient"
+let g:firefox_refresh_files = "*.xxxjs"
+"let $firefox_refresh_host = "webclient"
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_detect_modified=1
