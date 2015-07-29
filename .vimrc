@@ -15,20 +15,21 @@ Bundle 'gmarik/vundle'
 "
 
 Bundle 'SeanThomasWilliams/dwm.vim'
+Bundle 'airblade/vim-gitgutter'
+Bundle 'benmills/vimux'
+Bundle 'benmills/vimux-golang'
+Bundle 'bling/vim-airline'
+Bundle 'einars/js-beautify'
+Bundle 'fatih/vim-go'
 Bundle 'gagoar/StripWhiteSpaces'
 Bundle 'kien/ctrlp.vim'
+Bundle 'maksimr/vim-jsbeautify'
 Bundle 'mileszs/ack.vim'
 Bundle 'scrooloose/syntastic'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
+Bundle 'veegee/cql-vim'
 Bundle 'vim-scripts/vimwiki'
-Bundle 'airblade/vim-gitgutter'
-Bundle 'fatih/vim-go'
-Bundle 'maksimr/vim-jsbeautify'
-Bundle 'einars/js-beautify'
-Bundle 'bling/vim-airline'
-Bundle 'benmills/vimux'
-Bundle 'benmills/vimux-golang'
 
 
 "+----------------- Basic Configurations ------------+
@@ -401,7 +402,7 @@ let g:ctrlp_use_caching = 1
 let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
 let g:ctrlp_custom_ignore = {
-\ 'dir':  'public/js/lib$',
+\ 'dir':  '\v[\/]\.(git|hg|svn)$\|\.png$',
 \ 'file': '\.exe$\|\.so$\|\.dll$|\.swp$|\.swo$|\.pyc$|\.orig$',
 \ 'link': 'some_bad_symbolic_links',
 \ }
@@ -428,18 +429,26 @@ nnoremap <leader>V :w \| tabc \| so ~/.vimrc<CR>
 " ----------------------------------------- "
 
 " golang settings
-let g:go_fmt_fail_silently = 1
 au BufNewFile,BufRead *.go setlocal noet ts=4 sw=4 sts=4
-au FileType go nmap gd <Plug>(go-def)
-au FileType go nmap <Leader>s <Plug>(go-def-split)
-au FileType go nmap <Leader>v <Plug>(go-def-vertical)
-au FileType go nmap <Leader>i <Plug>(go-info)
-au FileType go nmap <leader>r <Plug>(go-run)
-au FileType go nmap <leader>b <Plug>(go-build)
-au FileType go nmap <Leader>d <Plug>(go-doc-vertical)
+au FileType go map <Leader>gi :wa<CR> :GoImports<CR>
+au FileType go map <Leader>l  :wa<CR> :GoLint<CR>
 au FileType go map <Leader>ra :wa<CR> :GolangTestCurrentPackage<CR>
 au FileType go map <Leader>rf :wa<CR> :GolangTestFocused<CR>
-"au FileType go nmap  <leader>t  <Plug>(go-test)
+au FileType go nmap <Leader>d <Plug>(go-def-vertical)
+au FileType go nmap <Leader>i <Plug>(go-info)
+au FileType go nmap <Leader>v <Plug>(go-def-vertical)
+au FileType go nmap gd <Plug>(go-def)
+let g:go_auto_type_info = 1
+let g:go_fmt_command = "goimports"
+let g:go_fmt_fail_silently = 1
+let g:go_highlight_array_whitespace_error = 1
+let g:go_highlight_chan_whitespace_error = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_structs = 1
+let g:go_play_open_browser = 0
+
 
 " lua settings
 au BufNewFile,BufRead *.lua setlocal noet ts=4 sw=4 sts=4
