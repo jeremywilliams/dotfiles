@@ -284,7 +284,7 @@ set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 "let g:pylint_signs = 0
 
 nnoremap <silent> <Leader>p :Pylint<CR> :copen<CR>
-nnoremap <silent> <Leader>P :call Pep8()<CR> :copen<<CR>
+nnoremap <silent> <Leader>P :call Pep8()<CR> :copen<CR>
 nnoremap <silent> <Leader>c :cclose<CR>
 nnoremap <silent> <Leader>C :copen<CR>
 
@@ -399,13 +399,13 @@ let g:ctrlp_switch_buffer = 'et'    " jump to a file if it's open already
 let g:ctrlp_mruf_max=450        " number of recently opened files
 let g:ctrlp_max_files=0         " do not limit the number of searchable files
 let g:ctrlp_use_caching = 1
-let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
 let g:ctrlp_custom_ignore = {
 \ 'dir':  '\v[\/]\.(git|hg|svn|resources|build)$',
-\ 'file': '\.exe$\|\.so$\|\.dll$|\.swp$|\.swo$|\.png$|\.jpg$|\.pyc$|\.orig$',
-\ 'link': 'some_bad_symbolic_links',
+\ 'file': '\v\.(exe|so|dll|swp|swo|pyc|orig|jpg|png)$',
 \ }
+
 let g:ctrlp_buftag_types = {
             \ 'go'         : '--language-force=go --golang-types=ftv',
             \ 'coffee'     : '--language-force=coffee --coffee-types=cmfvf',
