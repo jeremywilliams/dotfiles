@@ -46,9 +46,8 @@ if [ -f ~/.bash_profile ]; then
     . ~/.bash_profile
 fi
 
+alias python=/usr/local/bin/python2.7
+export PYTHONPATH=/usr/lib/python2.7/site-packages
+export PATH="/usr/local/bin:$PATH"
 export PATH=$HOME/bin/Sencha/Cmd/6.0.0.202:$PATH
-export KLE=$HOME/gocode/src/github.com/Novetta/KLE
-export PERSEUS=$HOME/gocode/src/github.com/Novetta/perseus
-export VIDEX=$HOME/gocode/src/github.com/Novetta/VideoEnterprise
-export COMMON=$HOME/gocode/src/github.com/Novetta/common
-export PWCOP=$HOME/gocode/src/github.com/Novetta/pwcop
+

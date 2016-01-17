@@ -15,7 +15,7 @@ mkdir -p $HOME/bin
 ln -sf $PWD/bin/* $HOME/bin/
 ln -sf $PWD/vim/ $HOME/.vim
 
-# Requires: "sudo yum -y install automake gcc gcc-c++ kernel-devel cmake"
+sudo yum -y install automake gcc gcc-c++ kernel-devel cmake python-devel curl-devel
 git submodule update --init --recursive
 cd $DIR/vim/bundle/YouCompleteMe
 ./install.py --gocode-completer

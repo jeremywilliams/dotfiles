@@ -7,6 +7,8 @@ export GOROOT="/usr/lib/golang"
 export GOPATH="$HOME/gocode"
 export NOVETTA="$HOME/gocode/src/github.com/Novetta"
 export VIDEX="$HOME/gocode/src/github.com/Novetta/VideoEnterprise"
+export ITK="$HOME/gocode/src/github.com/Novetta/ITK"
+export ARES="$HOME/gocode/src/github.com/Novetta/pwcop"
 export GOBIN="$GOPATH/bin"
 export GO_LOGGING_CONFIG="$HOME/logging.ini"
 export PATH="$HOME/bin/Sencha/Cmd:$JAVA_HOME/bin:/usr/local/bin:$HOME/bin:$GOROOT/bin:$GOBIN:$VIDEX/bin:$PATH"
@@ -35,6 +37,8 @@ alias vb="cd $VIDEX/videx2/videxweb && source ui.env && sencha app build"
 alias vx="cd $VIDEX/videx2/dev && ./dev-run-executor.sh -n"
 alias cm="cd $NOVETTA/common"
 alias pe="cd $NOVETTA/perseus"
+alias itk="cd $NOVETTA/ITK"
+alias ares="cd $NOVETTA/pwcop"
 
 if [[ -f "$HOME/.videx.env" ]]; then
     source $HOME/.videx.env

@@ -12,15 +12,10 @@ if [ -f ~/.alias ]; then
     . ~/.alias
 fi
 
-export PATH=/homey/williamsj/bin/Sencha/Cmd/5.1.3.61:$PATH
-export KLE=/homey/williamsj/gocode/src/github.com/Novetta/KLE
-export PERSEUS=/homey/williamsj/gocode/src/github.com/Novetta/perseus
-export VIDEX=/homey/williamsj/gocode/src/github.com/Novetta/VideoEnterprise
-export COMMON=/homey/williamsj/gocode/src/github.com/Novetta/common
-export PWCOP=/homey/williamsj/gocode/src/github.com/Novetta/pwcop
-export SENCHA_CMD_3_0_0="/homey/williamsj/bin/Sencha/Cmd/5.1.3.61"
+alias python=/usr/local/bin/python2.7
+export PYTHONPATH=/usr/lib/python2.7/site-packages
+export PATH="/usr/local/bin:$PATH"
 unset GOROOT
 
 export JAVA_HOME=/usr/lib/jvm/jre-1.7.0-openjdk.x86_64/
 export PATH=$PATH:/usr/lib/jvm/jre1.7.0-openjdk.x86_64/bin/
-export PATH="/homey/williamsj/bin/Sencha/Cmd:$PATH"
