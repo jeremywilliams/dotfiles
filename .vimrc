@@ -2,7 +2,6 @@
 
 filetype off
 set rtp+=~/.vim/bundle/vundle/
-"set rtp+=$GOROOT/misc/vim
 call vundle#rc()
 Bundle 'gmarik/vundle'
 
@@ -37,8 +36,6 @@ Bundle 'vim-scripts/vimwiki'
 
 
 "+----------------- Basic Configurations ------------+
-"
-
 " GUI Configuration
 if has('gui_running')
     set spell " Spelling looks ugly in command line mode
@@ -50,50 +47,41 @@ if has('gui_running')
     set guifont=Terminus\ 10
 endif
 
-" =========================
 " Vim-Script Configurations
-" =========================
-let g:NERDTreeChDirMode=2 " Let NERDTRee Change Directories for Me
-let g:NERDTreeIgnore = ['\.pyc$', '\.swp$', '.DS_Store'] " Nerdtree doesnt follow wildignore anymore need to set them manually.
-let g:Powerline_symbols='fancy' " Use fancy theme for PowerLine
 let g:indent_guides_guide_size = 1 " Only use one column to show indent
 let g:indent_guides_start_level = 2 " Start on the second level of indents
-let g:syntastic_javascript_checkers = ['jshint']
 
 " Keymappings
-" ============================
-"
 " Quick write, write quit and quit key mappings for normal mode
 nmap <leader>w :write<CR>
 nmap <leader>wq :write <bar> :quit<CR>
 nmap <leader>q :quit<CR>
 
-" Syntastic / Location list mappings
+" Location list mappings
 nmap <silent><leader>lc :lcl<CR>
 nmap <silent><leader>lo :lw<CR>
 
-" NERDTRee Keymappings
-nmap <leader>nt :NERDTreeToggle<CR>
-nmap <leader>nf :NERDTreeFocus<CR>
-nmap <leader>nch :NERDTree .<CR>
+" Quick search and replace
+nmap  S  :%s//g<LEFT><LEFT>
+
+" Quick copen/cclose
+nnoremap <silent> <Leader>c :cclose<CR>
+nnoremap <silent> <Leader>C :copen<CR>
 
 " Autocommands that cant live in after/filetypes
-" ----------------------------------------------
-
 if has('autocmd')
     autocmd BufNewFile,Bufread *.wsgi set ft=python
     autocmd BufNewFile,Bufread *.spect set ft=spec
+    autocmd BufNewFile,BufRead *.lua setlocal noet ts=4 sw=4 sts=4
 endif
 
-" Extra Functions
-" =====================
+au VimResized * :wincmd = " Resize splits when the window is resized
 
-function! <SID>SynStack()
-    if !exists("*synstack")
-        return
-    endif
-    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
+" ARROW KEYS ARE UNACCEPTABLE
+map <Left> <Nop>
+map <Right> <Nop>
+map <Up> <Nop>
+map <Down> <Nop>
 
 " If there is a vimrc.local source that before current
 if filereadable(expand("~/.vimrc.local"))
@@ -104,15 +92,14 @@ endif
 " BASIC EDITING CONFIGURATION
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 filetype plugin indent on
-" set visualbell "Make the screen flash on bell
-"set list
-"set listchars=tab:▸\ ,trail:⋅,nbsp:⋅ ",eol:¬
 if exists('+relativenumber')
 	set relativenumber
 endif
 
-if exists('+undodir')
+if has('persistent_undo')
+    set undolevels=5000
     set undodir=~/.vim/tmp/undo//     " undo files
+    set undofile
 endif
 
 set autoindent
@@ -123,7 +110,7 @@ set backup " Store temporary files in a central spot
 set backupdir=~/.vim/tmp/backup// " backups
 set cmdheight=2
 set complete=.,w,b,u,t " Better Completion
-set completeopt=longest,menuone " Better Completion
+set completeopt=longest,menuone,preview " Better Completion Options
 set cursorline " Show highlight on the cursor line
 set diffopt+=iwhite
 set directory=~/.vim/tmp/swap//   " swap files
@@ -138,7 +125,8 @@ set ignorecase "Dont care about case when searching
 set incsearch " Show search results while doing /
 set laststatus=2 " Always have a status line regardless
 set lazyredraw
-set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
+set nolist " Don't use the listchars
+set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,trail:⋅
 set magic
 set matchtime=3
 set modelines=0
@@ -172,7 +160,7 @@ set textwidth=120
 set timeoutlen=250
 set title "Show a window title
 set ttyfast
-set undolevels=20 " Keep 20 undo levels
+set updatecount=10
 set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
 set wildignore+=*.DS_Store                       " OSX bullshit
 set wildignore+=.hg,.git,.svn                    " Version control
@@ -207,18 +195,16 @@ augroup cline
     au WinEnter,InsertLeave * set cursorline
 augroup END
 
-" Make those folders automatically if they don't already exist.
+" Make directories automatically if they don't already exist.
 if !isdirectory(expand(&backupdir))
     call mkdir(expand(&backupdir), "p")
 endif
 if !isdirectory(expand(&directory))
     call mkdir(expand(&directory), "p")
 endif
-
-iabbrev ldis ಠ_ಠ
-iabbrev lsad ಥ_ಥ
-iabbrev lhap ಥ‿ಥ
-iabbrev lmis ಠ‿ಠ
+if !isdirectory(expand(&undodir))
+    call mkdir(expand(&undodir), "p")
+endif
 
 " Center on c-o
 nnoremap <c-o> <c-o>zz
@@ -226,53 +212,17 @@ nnoremap <c-o> <c-o>zz
 " Don't auto-jump on *
 nnoremap * *<c-o>
 
-" Sort lines
-nnoremap <leader>s vip:!sort<cr>
-vnoremap <leader>s :!sort<cr>
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
-" CUSTOM AUTOCMDS
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-augroup vimrcEx
-  " Clear all autocmds in the group
-  autocmd!
-  autocmd FileType text setlocal textwidth=78
-  " Jump to last cursor position unless it's invalid or in an event handler
-  autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
-    \ endif
-
-  autocmd FileType javascript,python set sw=4 sts=4 et
-
-  " Indent p tags
-  " autocmd FileType html,eruby if g:html_indent_tags !~ '\\|p\>' | let g:html_indent_tags .= '\|p\|li\|dt\|dd' | endif
-
-  " Don't syntax highlight markdown because it's often wrong
-  autocmd! FileType mkd setlocal syn=off
-
-  " Leave the return key alone when in command line windows, since it's used
-  " to run commands there.
-  autocmd! CmdwinEnter * :unmap <cr>
-  autocmd! CmdwinLeave * :call MapCR()
-augroup END
-
-".vimrc
+" Beautify
 autocmd FileType javascript nnoremap <leader>f :call JsBeautify()<cr>
 autocmd FileType html nnoremap <leader>f :call HtmlBeautify()<cr>
 autocmd FileType css nnoremap <leader>f :call CSSBeautify()<cr>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " COLOR
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set background=dark
 color inkpot
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " STATUS LINE
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGIN SETTINGS
@@ -301,14 +251,6 @@ let g:tagbar_singleclick = 1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MISC FUNCTIONS
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-au BufEnter * if match( getline(1) , '^\#!') == 0 | execute("let b:interpreter = getline(1)[2:]") | endif
-
-fun! CallInterpreter()
-    if exists("b:interpreter")
-         exec ("!".b:interpreter." %")
-    endif
-endfun
 
 " Clear the search buffer when hitting return
 function! MapCR()
@@ -316,9 +258,15 @@ function! MapCR()
 endfunction
 call MapCR()
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Insert the current time
+command! InsertTime :normal a<c-r>=strftime('%F %H:%M:%S.0 %z')<cr>
+
+cabbrev hsplit split
+cabbrev new vnew
+cabbrev right botright
+cabbrev sta vertical sta
+
 " MISC KEY MAPS
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <silent> <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 nnoremap <F5> <ESC>:w<CR>:call CallInterpreter()<CR>
 
@@ -333,9 +281,6 @@ inoremap <C-Space> <C-X><C-I>
 " Resize splits
 nnoremap <silent> = :exe "vertical resize " . (winwidth(0) * 4/3)<CR>
 nnoremap <silent> - :exe "vertical resize " . (winwidth(0) * 3/4)<CR>
-
-" Find tag for selected word
-nnoremap <C-]> :execute 'tj' expand('<cword>')<CR>zv
 
 map <leader>y "*y
 
@@ -367,23 +312,15 @@ nnoremap <C-A> :call DWM_Focus()<CR>
 nmap <silent> <leader><space> :nohlsearch<CR>
 nnoremap <silent> <Leader>s :StripWhiteSpaces<CR>
 
-"nnoremap ; :
-"vnoremap ; :
-"vnoremap : ;
-
+"Fix shell expansion with putty
 map [[ ?{<CR>w99[{
 map ][ /}<CR>b99]}
 map ]] j0[[%/{<CR>
 map [] k$][%?}<CR>
 
-nnoremap <silent> <Leader>] :TagbarToggle<CR>
-nnoremap <C-]> :execute 'tj' expand('<cword>')<CR>zv
-
 "tab handling
 nnoremap <Leader>t :tab sp<CR>
 nnoremap <Leader>w :tabc<CR>
-nnoremap <Leader>l :TagbarToggle<CR>
-nnoremap <silent> <Leader>n :NERDTreeToggle<CR>
 
 "make Y behave more like C and D
 nmap Y y$
@@ -391,10 +328,6 @@ nmap Y y$
 " Ack features
 nnoremap <Leader>a :Ack --type=%:e
 nnoremap <Leader>A :Ack --type=%:e <C-r><C-w><CR>
-
-"Dont show me any output when I build something
-"Because I am using quickfix for errors
-nmap <leader>m :make<CR><enter>
 
 " CtrlP
 "let g:ctrlp_working_path_mode = 2
@@ -409,7 +342,6 @@ let g:ctrlp_custom_ignore = {
 \ 'dir':  '\v[\/]\.(git|hg|svn|resources|build)$',
 \ 'file': '\v\.(exe|so|dll|swp|swo|pyc|orig|jpg|png)$',
 \ }
-
 let g:ctrlp_buftag_types = {
             \ 'go'         : '--language-force=go --golang-types=ftv',
             \ 'coffee'     : '--language-force=coffee --coffee-types=cmfvf',
@@ -419,20 +351,21 @@ let g:ctrlp_buftag_types = {
             \ }
 nnoremap <C-t> :CtrlPCurWD<CR>
 
-" ctrl-j/k to jump between 'compiler' messages
+" ctrl-n/m to jump between 'compiler' messages
 nnoremap <silent> <C-n> :cn<CR>
 nnoremap <silent> <C-m> :cp<CR>
 
 " fix syntax hl:
 nnoremap U :syntax sync fromstart<cr>:redraw!<cr>
-"save | close tab | reload vimrc
-nnoremap <leader>V :w \| tabc \| so ~/.vimrc<CR>
 
 " ------------------------------------------"
 " Plugin Settings
 " ----------------------------------------- "
 
-" golang settings
+" YCM settings
+let g:ycm_autoclose_preview_window_after_insertion = 1
+
+" Golang
 au BufNewFile,BufRead *.go setlocal noet ts=4 sw=4 sts=4
 au FileType go map <Leader>gi :wa<CR> :GoImports<CR>
 au FileType go map <Leader>b :wa<CR> :GoBuild<CR>
@@ -442,22 +375,31 @@ au FileType go nmap <Leader>d <Plug>(go-def-vertical)
 au FileType go nmap <Leader>i <Plug>(go-info)
 au FileType go nmap <Leader>r <Plug>(go-rename)
 au FileType go nmap gd <Plug>(go-def)
+au FileType go nmap <leader>rt <Plug>(go-run-tab)
+au FileType go nmap <Leader>rs <Plug>(go-run-split)
+au FileType go nmap <Leader>rv <Plug>(go-run-vertical)
+" Tern
 au FileType javascript nmap gd :TernDef<CR>
 au FileType javascript nmap <Leader>d :TernDefSplit<CR>
 au FileType javascript nmap <Leader>i :TernDoc<CR>
+
+" Go settings
 let g:go_auto_type_info = 1
-let g:go_dispatch_enabled = 1
-let g:go_fmt_fail_silently = 1
+let g:go_dispatch_enabled = 0
+let g:go_fmt_fail_silently = 0
 let g:go_highlight_array_whitespace_error = 1
+let g:go_highlight_build_constraints = 1
 let g:go_highlight_chan_whitespace_error = 1
 let g:go_highlight_functions = 1
+let g:go_highlight_interfaces = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_structs = 1
 let g:go_jump_to_error = 1
 let g:go_play_open_browser = 0
-let g:syntastic_check_on_open= 0
-let g:syntastic_go_checkers = ['gometalinter', 'golint', 'govet']
+let g:go_term_mode = "split"
+
+" Tern
 let g:tern_map_keys = 1
 let g:tern_map_prefix = '<leader>'
 let g:tern_show_argument_hints='on_hold'
@@ -525,8 +467,20 @@ cabbrev sta vertical sta
 
 " Firefox refresh
 let g:firefox_refresh_files = "*.xxxjs"
+" Syntastic plugin
+let g:syntastic_aggregate_errors = 1
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_go_checkers = ['go', 'golint', 'govet']
+let g:syntastic_javascript_checkers = ['jshint']
+
+" Firefox refresh
+"let g:firefox_refresh_files = "*.js"
 "let $firefox_refresh_host = "webclient"
 
+" Airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_detect_modified=1
 let g:airline_detect_paste=1

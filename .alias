@@ -20,6 +20,7 @@ export JAVA_HOME="/usr/lib/jvm/latest"
 export GOROOT="/usr/lib/golang"
 export GOPATH="$HOME/gocode"
 export NOVETTA="$HOME/gocode/src/github.com/Novetta"
+export ARES="$HOME/gocode/src/github.com/Novetta/pwcop"
 export ITK="$HOME/gocode/src/github.com/Novetta/ITK"
 export VIDEX="$HOME/gocode/src/github.com/Novetta/VideoEnterprise"
 export ITK="$HOME/gocode/src/github.com/Novetta/ITK"
@@ -31,7 +32,6 @@ export PROMPT_COMMAND="history -a; history -c; history -r; ${PROMPT_COMMAND}"
 export EDITOR="/usr/bin/vim"
 export C_COLON_BACKSLASH='C:${PWD//\//\\\}>'
 export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
-export LC_ALL=C
 export HISTSIZE=
 export HISTFILESIZE=
 export HISTFILE="$HOME/.bash_eternal_history"
@@ -45,17 +45,34 @@ alias htop="TERM=screen htop"
 alias itk="cd $ITK"
 alias itkappbuild="cd $ITK/itkweb && sencha app build"
 alias itkappwatch="cd $ITK/itkweb && sencha app watch"
-alias itkunittest="~/bin/watchcmd $ITK/itkserver $ITK/dev/rununittests.sh"
-alias itkserver="source $ITK/dev/itk_dev.env && ~/bin/watchcmd $ITK/itkserver go run $ITK/itkserver/server/server.go"
+alias itkunittest="cd $ITK/itkserver $ITK/dev/rununittests.sh"
+alias itkserver="source $ITK/dev/itk_dev.env && go run $ITK/itkserver/server/server.go"
 alias ls="ls -hl --color"
 alias nov="cd $NOVETTA"
 alias pe="cd $NOVETTA/perseus"
 alias ares="cd $ARES"
-alias videxappbuild="cd $VIDEX/videx2/videxweb && source ui.env && sencha app build"
-alias videxappwatch="cd $VIDEX/videx2/videxweb && source ui.env && sencha app watch"
-alias videxunittest="~/bin/watchcmd $VIDEX/videx2/videxserver $VIDEX/videx2/dev/rununittests.sh"
+alias videxappbuild="cd $VIDEX/videx2/videxweb && source ui.env && sencha app build geospatial development"
+alias videxappwatch="cd $VIDEX/videx2/videxweb && source ui.env && sencha app watch geospatial development"
+alias videxunittest="cd $VIDEX/videx2/videxserver $VIDEX/videx2/dev/rununittests.sh"
+alias videxserver="cd $VIDEX/videx2/videxserver && go run $VIDEX/videx2/videxserver/server/server.go"
 alias ve="cd $VIDEX/videx2"
-alias vx="rm -f $CONF_DIR/executor.cfg && cd $VIDEX/videx2/dev && ./dev-run-executor.sh"
+alias vx="$VIDEX/videx2/dev/dev-run-executor.sh"
+alias aresappbuild="cd $ARES/aresweb && sencha app build development"
+alias aresappwatch="cd $ARES/aresweb && sencha app watch development"
+alias aresunittest="cd $ARES/aresserver && $ARES/dev/rununittests.sh"
+alias aresserver="cd $ARES/aresserver && go run $ARES/aresserver/server/server.go"
+alias ar="cd $ARES"
+alias gitfp="git fetch -p && git pull && git gc"
+which nvim &> /dev/null && alias vim="nvim"
+
+export PATH=/opt/rh/python27/root/usr/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+export MANPATH=/opt/rh/python27/root/usr/share/man:${MANPATH}
+# For systemtap
+export XDG_DATA_DIRS=/opt/rh/python27/root/usr/share${XDG_DATA_DIRS:+:${XDG_DATA_DIRS}}
+# # For pkg-config
+export PKG_CONFIG_PATH=/opt/rh/python27/root/usr/lib64/pkgconfig${PKG_CONFIG_PATH:+:${PKG_CONFIG_PATH}}
+export PYTHONPATH=/usr/lib/python2.7/site-packages:/opt/rh/python27/root/usr/lib64/python2.7/site-packages
 
 if [[ -f "$HOME/.videx.env" ]]; then
     source $HOME/.videx.env
